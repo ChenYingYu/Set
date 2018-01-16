@@ -14,16 +14,24 @@ class Set {
     var indexOfFirstCard: Int?
     
     var indexOfSecondCard: Int?
-
-    //var matchIndexOne = 0
-    
-    //var matchIndexTwo = 0
     
     func chooseCard (at index: Int) {
-        // two cards are select, rady to m
             if let matchIndexOne = indexOfFirstCard, let matchIndexTwo = indexOfSecondCard, matchIndexOne != index, matchIndexTwo != index {
                 // three card are selected, compare if "set"
                 print("Ready to Set~")
+                var checkSet = 0
+                let firstCard = cards[matchIndexOne].condition
+                let secondCard = cards[matchIndexTwo].condition
+                let thirdCard = cards[index].condition
+                for conditionIndex in 0..<firstCard.count {
+                    if !(firstCard[conditionIndex] == secondCard[conditionIndex] && secondCard[conditionIndex] == thirdCard[conditionIndex]), !(firstCard[conditionIndex] != secondCard[conditionIndex] && secondCard[conditionIndex] != thirdCard[conditionIndex] && firstCard[conditionIndex] != thirdCard[conditionIndex]) {
+                        print("Not Set~")
+                        break
+                    } else {
+                        checkSet += 1
+                    }
+                }
+                if checkSet == firstCard.count { print("Seeeeeeeet~") }
                 indexOfFirstCard = nil
                 indexOfSecondCard = nil
             } else {
@@ -46,7 +54,7 @@ class Set {
                 }
         }
         cards[index].isSelected = cards[index].isSelected == true ? false : true
-        print("First card: \(String(describing: indexOfFirstCard))\n Second card: \(String(describing: indexOfSecondCard))\n Chosen card: \(index)")
+        //print("First card: \(String(describing: indexOfFirstCard))\n Second card: \(String(describing: indexOfSecondCard))\n Chosen card: \(index)")
     }
     
     init(numberOfCards: Int) {

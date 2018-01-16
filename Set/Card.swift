@@ -19,6 +19,7 @@ struct Card
     var isSelected = false
     var isMatched = false
     var identifier: Int
+    var condition = [Int]()
     
     static var identifierCount = 0
     

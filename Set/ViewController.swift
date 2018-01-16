@@ -20,34 +20,36 @@ class ViewController: UIViewController {
     var shadingChoices = ["filled","striped","outline"]
     
     // record which patterns are chosen before
-    var chosenBefore = [(Int, Int, Int, String)]()
+    var chosenBefore = [(Int, Int, Int, Int)]()
 
     @IBOutlet var cardButtons: [UIButton]! {
         didSet {
-            for button in cardButtons {
+            for index in cardButtons.indices {
+                let button = cardButtons[index]
                 // choose random conditions
                 var randomSymbol = Int(arc4random_uniform(UInt32(symbolChoices.count)))
                 var randomNumber = (randomSymbol / 3) + 1
                 var randomColor = Int(arc4random_uniform(UInt32(colorChoices.count)))
-                var randomShading = shadingChoices[Int(arc4random_uniform(UInt32(shadingChoices.count)))]
+                var randomShading = Int(arc4random_uniform(UInt32(shadingChoices.count)))
                 // if the pattern is chosen before, choose again
                 while chosenBefore.contains(where: {($0,$1,$2,$3) == (randomSymbol, randomNumber, randomColor, randomShading)}){
                     randomSymbol = Int(arc4random_uniform(UInt32(symbolChoices.count)))
                     randomNumber = (randomSymbol / 3) + 1
                     randomColor = Int(arc4random_uniform(UInt32(colorChoices.count)))
-                    randomShading = shadingChoices[Int(arc4random_uniform(UInt32(shadingChoices.count)))]
+                    randomShading = Int(arc4random_uniform(UInt32(shadingChoices.count)))
                 }
                 // put symbol on the card
-                if randomShading == "filled" {
-                    button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.foregroundColor: colorChoices[randomColor]]), for: UIControlState.normal)
-                } else if randomShading == "striped" {
+                if shadingChoices[randomShading] == "filled" { button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.foregroundColor: colorChoices[randomColor]]), for: UIControlState.normal)
+                } else if shadingChoices[randomShading] == "striped" {
                     button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.foregroundColor: UIColor.withAlphaComponent(colorChoices[randomColor])(0.25)]), for: UIControlState.normal)
-                } else if randomShading == "outline" {
+                } else if shadingChoices[randomShading] == "outline" {
                     button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.strokeColor: colorChoices[randomColor],NSAttributedStringKey.strokeWidth: 10]), for: UIControlState.normal)
                 }
                 
                 // note this pattern is chosen before
                 chosenBefore += [(randomSymbol, randomNumber, randomColor, randomShading)]
+                // store conditions to model
+                game.cards[index].condition = [randomSymbol % 3, randomNumber, randomColor, randomShading]
             }
         }
     }
