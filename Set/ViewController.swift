@@ -24,7 +24,13 @@ class ViewController: UIViewController {
 
     @IBOutlet var cardButtons: [UIButton]! {
         didSet {
-            for index in cardButtons.indices {
+            assignCards()
+        }
+    }
+    
+    func assignCards() {
+        for index in cardButtons.indices {
+            if game.cards[index].condition.isEmpty {
                 let button = cardButtons[index]
                 // choose random conditions
                 var randomSymbol = Int(arc4random_uniform(UInt32(symbolChoices.count)))
@@ -48,6 +54,7 @@ class ViewController: UIViewController {
                 
                 // note this pattern is chosen before
                 chosenBefore += [(randomSymbol, randomNumber, randomColor, randomShading)]
+                print("\(chosenBefore.count)")
                 // store conditions to model
                 game.cards[index].condition = [randomSymbol % 3, randomNumber, randomColor, randomShading]
             }
@@ -56,6 +63,7 @@ class ViewController: UIViewController {
     
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender) {
+            assignCards()
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
         } else {

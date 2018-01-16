@@ -31,7 +31,12 @@ class Set {
                         checkSet += 1
                     }
                 }
-                if checkSet == firstCard.count { print("Seeeeeeeet~") }
+                if checkSet == firstCard.count {
+                    print("Seeeeeeeet~")
+                    cards[index].condition.removeAll()
+                    cards[matchIndexOne].condition.removeAll()
+                    cards[matchIndexTwo].condition.removeAll()
+                }
                 indexOfFirstCard = nil
                 indexOfSecondCard = nil
             } else {
