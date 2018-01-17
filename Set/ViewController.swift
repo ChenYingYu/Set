@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     var visibleCards = 12
     func assignProperty() {
         for index in cardButtons.indices {
-            if game.cards[index].property.isEmpty, index < visibleCards {
+            if game.cards[index].property.isEmpty, index < visibleCards, game.usedCombination.count < 81 {
                 game.cards[index].isSelected = false
                 let button = cardButtons[index]
                 // choose random conditions
@@ -55,6 +55,9 @@ class ViewController: UIViewController {
                 game.usedCombination += [(randomSymbol, randomNumber, randomColor, randomShading)]
                 // store card's properties to model
                 game.cards[index].property = [randomSymbol % 3, randomNumber, randomColor, randomShading]
+            } else if game.cards[index].property.isEmpty {
+                cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
+                cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             }
         }
     }
