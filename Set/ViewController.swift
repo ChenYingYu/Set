@@ -22,13 +22,12 @@ class ViewController: UIViewController {
     // record which patterns are chosen before
     @IBOutlet var cardButtons: [UIButton]! {
         didSet {
-            assignCards()
+            assignProperty()
         }
     }
     
     var visibleCards = 12
-    
-    func assignCards() {
+    func assignProperty() {
         for index in cardButtons.indices {
             if game.cards[index].property.isEmpty, index < visibleCards {
                 game.cards[index].isSelected = false
@@ -52,11 +51,9 @@ class ViewController: UIViewController {
                 } else if shadingChoices[randomShading] == "outline" {
                     button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.strokeColor: colorChoices[randomColor],NSAttributedStringKey.strokeWidth: 10]), for: UIControlState.normal)
                 }
-                
                 // note this pattern is chosen before
                 game.usedCombination += [(randomSymbol, randomNumber, randomColor, randomShading)]
-                print("\(game.usedCombination.count)")
-                // store conditions to model
+                // store card's properties to model
                 game.cards[index].property = [randomSymbol % 3, randomNumber, randomColor, randomShading]
             }
         }
@@ -64,7 +61,7 @@ class ViewController: UIViewController {
     
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender) {
-            assignCards()
+            assignProperty()
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
         } else {
@@ -75,7 +72,7 @@ class ViewController: UIViewController {
     func addCards() {
         for index in cardButtons.indices {
             if game.cards[index].property.isEmpty, index < visibleCards {
-                assignCards()
+                assignProperty()
                 updateViewFromModel()
                 return
             }
@@ -85,7 +82,7 @@ class ViewController: UIViewController {
                 cardButtons[visibleCards].backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
                 visibleCards += 1
             }
-            assignCards()
+            assignProperty()
         } else {
             print("can not add more cards")
         }
