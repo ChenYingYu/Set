@@ -97,9 +97,16 @@ class ViewController: UIViewController {
             let button = cardButtons[index]
             let card = game.cards[index]
             if card.isSelected == true {
-                button.layer.borderWidth = 5.0
-                button.layer.borderColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
-                button.layer.cornerRadius = 8.0
+                if card.set == true {
+                    button.layer.borderWidth = 6.0
+                    button.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+                    button.layer.cornerRadius = 8.0
+                    game.cards[index].set = false
+                } else {
+                    button.layer.borderWidth = 5.0
+                    button.layer.borderColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
+                    button.layer.cornerRadius = 8.0
+                }
             } else {
                 button.layer.borderWidth = 0.0
             }

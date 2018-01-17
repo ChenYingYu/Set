@@ -12,5 +12,6 @@ struct Card
 {
     var isSelected = false
     var property = [Int]()
+    var set = false
     
 }

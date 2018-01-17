@@ -19,22 +19,23 @@ class Set {
     
     func chooseCard (at index: Int) {
             if let matchIndexOne = indexOfFirstCard, let matchIndexTwo = indexOfSecondCard, matchIndexOne != index, matchIndexTwo != index {
-                // three card are selected, compare if "set"
-                print("Ready to Set~")
-                var checkSet = 0
+                // check if three cards form a "Set"
+                var checkSetPorperty = 0
                 let firstCard = cards[matchIndexOne].property
                 let secondCard = cards[matchIndexTwo].property
                 let thirdCard = cards[index].property
-                for conditionIndex in 0..<firstCard.count {
-                    if !(firstCard[conditionIndex] == secondCard[conditionIndex] && secondCard[conditionIndex] == thirdCard[conditionIndex]), !(firstCard[conditionIndex] != secondCard[conditionIndex] && secondCard[conditionIndex] != thirdCard[conditionIndex] && firstCard[conditionIndex] != thirdCard[conditionIndex]) {
-                        print("Not Set~")
+                // check four properties
+                for propertyIndex in 0..<firstCard.count {
+                    if !(firstCard[propertyIndex] == secondCard[propertyIndex] && secondCard[propertyIndex] == thirdCard[propertyIndex]), !(firstCard[propertyIndex] != secondCard[propertyIndex] && secondCard[propertyIndex] != thirdCard[propertyIndex] && firstCard[propertyIndex] != thirdCard[propertyIndex]) {
                         break
                     } else {
-                        checkSet += 1
+                        checkSetPorperty += 1
                     }
                 }
-                if checkSet == firstCard.count {
-                    print("Seeeeeeeet~")
+                if checkSetPorperty == firstCard.count {
+                    cards[index].set = true
+                    cards[matchIndexOne].set = true
+                    cards[matchIndexTwo].set = true
                     cards[index].property.removeAll()
                     cards[matchIndexOne].property.removeAll()
                     cards[matchIndexTwo].property.removeAll()
@@ -44,19 +45,20 @@ class Set {
             } else {
                 // deselection
                 if indexOfFirstCard == index {
+                    // deselect first card
                     indexOfFirstCard = indexOfSecondCard
                     indexOfSecondCard =  nil
                 } else if indexOfSecondCard == index {
+                    // deselect second card
                     indexOfSecondCard = nil
-                }
-                    // select first card, and deselect other
-                else if indexOfFirstCard == nil {
+                } else if indexOfFirstCard == nil {
                     indexOfFirstCard = index
+                    // deselect all cards
                     for deselectIndex in cards.indices {
                         cards[deselectIndex].isSelected = false
                     }
-                }   // select second card
-                else {
+                } else {
+                    // select second card
                     indexOfSecondCard = index
                 }
         }
