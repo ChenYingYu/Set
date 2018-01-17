@@ -20,8 +20,6 @@ class ViewController: UIViewController {
     var shadingChoices = ["filled","striped","outline"]
     
     // record which patterns are chosen before
-    var chosenBefore = [(Int, Int, Int, Int)]()
-
     @IBOutlet var cardButtons: [UIButton]! {
         didSet {
             assignCards()
@@ -41,7 +39,7 @@ class ViewController: UIViewController {
                 var randomColor = Int(arc4random_uniform(UInt32(colorChoices.count)))
                 var randomShading = Int(arc4random_uniform(UInt32(shadingChoices.count)))
                 // if the pattern is chosen before, choose again
-                while chosenBefore.contains(where: {($0,$1,$2,$3) == (randomSymbol, randomNumber, randomColor, randomShading)}){
+                while game.usedCombination.contains(where: {($0,$1,$2,$3) == (randomSymbol, randomNumber, randomColor, randomShading)}){
                     randomSymbol = Int(arc4random_uniform(UInt32(symbolChoices.count)))
                     randomNumber = (randomSymbol / 3) + 1
                     randomColor = Int(arc4random_uniform(UInt32(colorChoices.count)))
@@ -56,8 +54,8 @@ class ViewController: UIViewController {
                 }
                 
                 // note this pattern is chosen before
-                chosenBefore += [(randomSymbol, randomNumber, randomColor, randomShading)]
-                print("\(chosenBefore.count)")
+                game.usedCombination += [(randomSymbol, randomNumber, randomColor, randomShading)]
+                print("\(game.usedCombination.count)")
                 // store conditions to model
                 game.cards[index].property = [randomSymbol % 3, randomNumber, randomColor, randomShading]
             }

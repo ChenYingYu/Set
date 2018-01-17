@@ -15,6 +15,8 @@ class Set {
     
     var indexOfSecondCard: Int?
     
+    var usedCombination = [(Int, Int, Int, Int)]()
+    
     func chooseCard (at index: Int) {
             if let matchIndexOne = indexOfFirstCard, let matchIndexTwo = indexOfSecondCard, matchIndexOne != index, matchIndexTwo != index {
                 // three card are selected, compare if "set"
