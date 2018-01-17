@@ -94,6 +94,10 @@ class ViewController: UIViewController {
         addCards()
     }
     
+    @IBOutlet weak var scoreLabel: UILabel!
+    
+    var score = 0
+    
     func updateViewFromModel() {
         for index in cardButtons.indices {
             let button = cardButtons[index]
@@ -104,6 +108,8 @@ class ViewController: UIViewController {
                     button.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
                     button.layer.cornerRadius = 8.0
                     game.cards[index].set = false
+                    score += 10
+                    scoreLabel.text = "Score: \(score)"
                 } else {
                     button.layer.borderWidth = 5.0
                     button.layer.borderColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
