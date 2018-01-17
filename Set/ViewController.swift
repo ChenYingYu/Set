@@ -61,9 +61,11 @@ class ViewController: UIViewController {
     
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender) {
-            assignProperty()
-            game.chooseCard(at: cardNumber)
-            updateViewFromModel()
+            if cardNumber < visibleCards, !game.cards[cardNumber].property.isEmpty {
+                assignProperty()
+                game.chooseCard(at: cardNumber)
+                updateViewFromModel()
+            }
         } else {
             print("chosen card was not in cardButtons")
         }
