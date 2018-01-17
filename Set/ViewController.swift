@@ -28,9 +28,12 @@ class ViewController: UIViewController {
         }
     }
     
+    var visibleCards = 12
+    
     func assignCards() {
         for index in cardButtons.indices {
-            if game.cards[index].condition.isEmpty {
+            if game.cards[index].condition.isEmpty, index < visibleCards {
+                game.cards[index].isSelected = false
                 let button = cardButtons[index]
                 // choose random conditions
                 var randomSymbol = Int(arc4random_uniform(UInt32(symbolChoices.count)))
@@ -69,6 +72,29 @@ class ViewController: UIViewController {
         } else {
             print("chosen card was not in cardButtons")
         }
+    }
+    
+    func addCards() {
+        for index in cardButtons.indices {
+            if game.cards[index].condition.isEmpty, index < visibleCards {
+                assignCards()
+                updateViewFromModel()
+                return
+            }
+        }
+        if visibleCards < 24 {
+            for _ in 0..<3 {
+                cardButtons[visibleCards].backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                visibleCards += 1
+            }
+            assignCards()
+        } else {
+            print("can not add more cards")
+        }
+    }
+    
+    @IBAction func addCardsButton(_ sender: UIButton) {
+        addCards()
     }
     
     func updateViewFromModel() {
