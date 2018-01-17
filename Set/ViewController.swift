@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     
     func assignCards() {
         for index in cardButtons.indices {
-            if game.cards[index].condition.isEmpty, index < visibleCards {
+            if game.cards[index].property.isEmpty, index < visibleCards {
                 game.cards[index].isSelected = false
                 let button = cardButtons[index]
                 // choose random conditions
@@ -59,7 +59,7 @@ class ViewController: UIViewController {
                 chosenBefore += [(randomSymbol, randomNumber, randomColor, randomShading)]
                 print("\(chosenBefore.count)")
                 // store conditions to model
-                game.cards[index].condition = [randomSymbol % 3, randomNumber, randomColor, randomShading]
+                game.cards[index].property = [randomSymbol % 3, randomNumber, randomColor, randomShading]
             }
         }
     }
@@ -76,7 +76,7 @@ class ViewController: UIViewController {
     
     func addCards() {
         for index in cardButtons.indices {
-            if game.cards[index].condition.isEmpty, index < visibleCards {
+            if game.cards[index].property.isEmpty, index < visibleCards {
                 assignCards()
                 updateViewFromModel()
                 return

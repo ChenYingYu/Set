@@ -20,9 +20,9 @@ class Set {
                 // three card are selected, compare if "set"
                 print("Ready to Set~")
                 var checkSet = 0
-                let firstCard = cards[matchIndexOne].condition
-                let secondCard = cards[matchIndexTwo].condition
-                let thirdCard = cards[index].condition
+                let firstCard = cards[matchIndexOne].property
+                let secondCard = cards[matchIndexTwo].property
+                let thirdCard = cards[index].property
                 for conditionIndex in 0..<firstCard.count {
                     if !(firstCard[conditionIndex] == secondCard[conditionIndex] && secondCard[conditionIndex] == thirdCard[conditionIndex]), !(firstCard[conditionIndex] != secondCard[conditionIndex] && secondCard[conditionIndex] != thirdCard[conditionIndex] && firstCard[conditionIndex] != thirdCard[conditionIndex]) {
                         print("Not Set~")
@@ -33,9 +33,9 @@ class Set {
                 }
                 if checkSet == firstCard.count {
                     print("Seeeeeeeet~")
-                    cards[index].condition.removeAll()
-                    cards[matchIndexOne].condition.removeAll()
-                    cards[matchIndexTwo].condition.removeAll()
+                    cards[index].property.removeAll()
+                    cards[matchIndexOne].property.removeAll()
+                    cards[matchIndexTwo].property.removeAll()
                 }
                 indexOfFirstCard = nil
                 indexOfSecondCard = nil
@@ -59,7 +59,6 @@ class Set {
                 }
         }
         cards[index].isSelected = cards[index].isSelected == true ? false : true
-        //print("First card: \(String(describing: indexOfFirstCard))\n Second card: \(String(describing: indexOfSecondCard))\n Chosen card: \(index)")
     }
     
     init(numberOfCards: Int) {
