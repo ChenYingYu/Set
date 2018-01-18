@@ -67,7 +67,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PZO-Gf-6Ni">
-                                <rect key="frame" x="99.000000000000014" y="628" width="177.33333333333337" height="60"/>
+                                <rect key="frame" x="99.000000000000014" y="562" width="177.33333333333337" height="60"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="50"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -345,13 +345,24 @@
                                     <action selector="touchCard:" destination="BYZ-38-t0r" eventType="touchUpInside" id="t6Y-nV-fSL"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBw-s7-WwK">
+                                <rect key="frame" x="93" y="630" width="190" height="60"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <state key="normal" title="New Game"/>
+                                <connections>
+                                    <action selector="newGameButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nbi-Ne-YWG"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="qBw-s7-WwK" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="0bZ-8W-wdp"/>
+                            <constraint firstItem="Iyo-Zt-ymn" firstAttribute="top" secondItem="qBw-s7-WwK" secondAttribute="bottom" constant="8" id="Djo-ce-q12"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Iyo-Zt-ymn" secondAttribute="bottom" constant="20" id="Goy-u2-dmW"/>
-                            <constraint firstItem="Iyo-Zt-ymn" firstAttribute="top" secondItem="PZO-Gf-6Ni" secondAttribute="bottom" constant="10" id="Jlw-sH-Chp"/>
                             <constraint firstItem="PZO-Gf-6Ni" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="MiO-kt-Ral"/>
                             <constraint firstItem="Iyo-Zt-ymn" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="lnm-D8-LhK"/>
+                            <constraint firstItem="qBw-s7-WwK" firstAttribute="top" secondItem="PZO-Gf-6Ni" secondAttribute="bottom" constant="8" id="wh2-3a-D7s"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
