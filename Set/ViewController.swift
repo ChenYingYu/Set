@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     var numberChoices = [1, 2, 3]
     
     var colorChoices = [#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1), #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)]
-    
+
     var shadingChoices = ["filled","striped","outline"]
     
     // record which patterns are chosen before
@@ -33,16 +33,16 @@ class ViewController: UIViewController {
                 game.cards[index].isSelected = false
                 let button = cardButtons[index]
                 // choose random conditions
-                var randomSymbol = Int(arc4random_uniform(UInt32(symbolChoices.count)))
+                var randomSymbol = symbolChoices.count.arc4random
                 var randomNumber = (randomSymbol / 3) + 1
-                var randomColor = Int(arc4random_uniform(UInt32(colorChoices.count)))
-                var randomShading = Int(arc4random_uniform(UInt32(shadingChoices.count)))
+                var randomColor = colorChoices.count.arc4random
+                var randomShading = shadingChoices.count.arc4random
                 // if the pattern is chosen before, choose again
                 while game.usedCombination.contains(where: {($0,$1,$2,$3) == (randomSymbol, randomNumber, randomColor, randomShading)}){
-                    randomSymbol = Int(arc4random_uniform(UInt32(symbolChoices.count)))
+                    randomSymbol = symbolChoices.count.arc4random
                     randomNumber = (randomSymbol / 3) + 1
-                    randomColor = Int(arc4random_uniform(UInt32(colorChoices.count)))
-                    randomShading = Int(arc4random_uniform(UInt32(shadingChoices.count)))
+                    randomColor = colorChoices.count.arc4random
+                    randomShading = shadingChoices.count.arc4random
                 }
                 // put symbol on the card
                 if shadingChoices[randomShading] == "filled" { button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.foregroundColor: colorChoices[randomColor]]), for: UIControlState.normal)
@@ -146,4 +146,14 @@ class ViewController: UIViewController {
     }
 }
 
-
+extension Int {
+    var arc4random: Int {
+        if self > 0 {
+            return Int(arc4random_uniform(UInt32(self)))
+        } else if self < 0{
+            return -Int(arc4random_uniform(UInt32(abs(self))))
+        } else {
+            return 0
+        }
+    }
+}
