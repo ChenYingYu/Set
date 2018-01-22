@@ -10,15 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     lazy var game = Set(numberOfCards: cardButtons.count)
-    // there are four conditions
-    var symbolChoices = ["●","▲","■","●●","▲▲","■■","●●●","▲▲▲","■■■"]
-    
-    var numberChoices = [1, 2, 3]
-    
-    var colorChoices = [#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1), #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1), #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)]
 
-    var shadingChoices = ["filled","striped","outline"]
-    
     // record which patterns are chosen before
     @IBOutlet var cardButtons: [UIButton]! {
         didSet {
@@ -27,34 +19,37 @@ class ViewController: UIViewController {
     }
     
     var visibleCards = 12
+    var cardDeck = Card().cardDeck
+    var usedCard = [(String,String,String)]()
     func assignProperty() {
         for index in cardButtons.indices {
             if game.cards[index].property.isEmpty, index < visibleCards, game.usedCombination.count < 81 {
                 game.cards[index].isSelected = false
                 let button = cardButtons[index]
-                // choose random conditions
-                var randomSymbol = symbolChoices.count.arc4random
-                var randomNumber = (randomSymbol / 3) + 1
-                var randomColor = colorChoices.count.arc4random
-                var randomShading = shadingChoices.count.arc4random
-                // if the pattern is chosen before, choose again
-                while game.usedCombination.contains(where: {($0,$1,$2,$3) == (randomSymbol, randomNumber, randomColor, randomShading)}){
-                    randomSymbol = symbolChoices.count.arc4random
-                    randomNumber = (randomSymbol / 3) + 1
-                    randomColor = colorChoices.count.arc4random
-                    randomShading = shadingChoices.count.arc4random
+                let randomPropertyIndex = cardDeck.count.arc4random
+                let cardProperty = cardDeck.remove(at: randomPropertyIndex)
+                let cardSymbol = cardProperty.0,numberOfSymbol = cardProperty.1, cardSymbolColor = cardProperty.2, cardSymbolStyle = cardProperty.3
+                
+                var symbolColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
+                switch cardSymbolColor {
+                case "blue": symbolColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
+                case "green": symbolColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+                case "red": symbolColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+                default: return
                 }
+
                 // put symbol on the card
-                if shadingChoices[randomShading] == "filled" { button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.foregroundColor: colorChoices[randomColor]]), for: UIControlState.normal)
-                } else if shadingChoices[randomShading] == "striped" {
-                    button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.foregroundColor: UIColor.withAlphaComponent(colorChoices[randomColor])(0.25)]), for: UIControlState.normal)
-                } else if shadingChoices[randomShading] == "outline" {
-                    button.setAttributedTitle(NSAttributedString(string: symbolChoices[randomSymbol], attributes: [NSAttributedStringKey.strokeColor: colorChoices[randomColor],NSAttributedStringKey.strokeWidth: 10]), for: UIControlState.normal)
+                if cardSymbolStyle == "filled" { button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.foregroundColor: symbolColor]), for: UIControlState.normal)
+                } else if cardSymbolStyle == "shade" {
+                    button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.foregroundColor: UIColor.withAlphaComponent(symbolColor)(0.25)]), for: UIControlState.normal)
+                } else if cardSymbolStyle == "outline" {
+                    button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.strokeColor: symbolColor,NSAttributedStringKey.strokeWidth: 10]), for: UIControlState.normal)
                 }
+                
                 // note this pattern is chosen before
-                game.usedCombination += [(randomSymbol, randomNumber, randomColor, randomShading)]
+                game.usedCombination += [(cardSymbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle)]
                 // store card's properties to model
-                game.cards[index].property = [randomSymbol % 3, randomNumber, randomColor, randomShading]
+                game.cards[index].property = [cardSymbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]
             } else if game.cards[index].property.isEmpty {
                 cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
                 cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
@@ -100,6 +95,7 @@ class ViewController: UIViewController {
         visibleCards = 12
         game.score = 0
         scoreLabel.text = "Score: \(game.score)"
+        cardDeck += game.usedCombination
         game.usedCombination.removeAll()
         for index in cardButtons.indices {
             let button = cardButtons[index]
