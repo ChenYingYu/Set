@@ -16,11 +16,30 @@ class Set {
     var indexOfSecondCard: Int?
     
     var usedCombination = [(String, String, String, String)]()
-    
+    // get or lose points
     var countPoints = { a, b -> Int in a + b }
     
     var score = 0
-
+    // speed of play
+    var startTime = Date()
+    
+    var endTime = Date()
+    
+    func timer() {
+        endTime = Date()
+        let timeInterval: Double = endTime.timeIntervalSince(startTime)
+        switch timeInterval {
+        case 0..<5.0:
+            score = countPoints(score, 20)
+        case 5.0..<10.0:
+            score = countPoints(score, 10)
+        default:
+            score = countPoints(score, 0)
+        }
+        print("time: \(timeInterval)")
+        startTime = Date()
+    }
+    
     func chooseCard (at index: Int) {
             if let matchIndexOne = indexOfFirstCard, let matchIndexTwo = indexOfSecondCard, matchIndexOne != index, matchIndexTwo != index {
                 // check if three cards form a "Set"
@@ -30,8 +49,10 @@ class Set {
                 let thirdCard = cards[index].property
                 // check four properties
                 for propertyIndex in 0..<firstCard.count {
+                    // misMatch
                     if !(firstCard[propertyIndex] == secondCard[propertyIndex] && secondCard[propertyIndex] == thirdCard[propertyIndex]), !(firstCard[propertyIndex] != secondCard[propertyIndex] && secondCard[propertyIndex] != thirdCard[propertyIndex] && firstCard[propertyIndex] != thirdCard[propertyIndex]) {
-                        score = countPoints(score, -10)
+                        startTime = Date()
+                        score = countPoints(score, -15)
                         break
                     } else {
                         checkSetPorperty += 1
@@ -41,6 +62,7 @@ class Set {
                     cards[index].set = true
                     cards[matchIndexOne].set = true
                     cards[matchIndexTwo].set = true
+                    timer()
                     score = countPoints(score, 30)
                     cards[index].property.removeAll()
                     cards[matchIndexOne].property.removeAll()
