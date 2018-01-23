@@ -12,7 +12,7 @@ struct Card
 {
     var isSelected = false
     var property = [String]()
-    var cardDeck = [(String, String, String, String)]()
+    var cardDeck = [(String, String, String)]()
     var set = false
     
     enum Symbol: String {
@@ -55,13 +55,12 @@ struct Card
     
     init() {
         for symbol in Symbol.all {
-            for number in Number.all {
-                for color in Color.all {
-                    for shade in Shade.all {
-                        cardDeck.append((symbol.rawValue,number.rawValue,color.rawValue,shade.rawValue))
-                    }
+            for color in Color.all {
+                for shade in Shade.all {
+                    cardDeck.append((symbol.rawValue,color.rawValue,shade.rawValue))
                 }
             }
+            
         }
     }
 }

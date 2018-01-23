@@ -20,7 +20,6 @@ class ViewController: UIViewController {
     
     var visibleCards = 12
     var cardDeck = Card().cardDeck
-    var usedCard = [(String,String,String)]()
     func assignProperty() {
         for index in cardButtons.indices {
             if game.cards[index].property.isEmpty, index < visibleCards, game.usedCombination.count < 81 {
@@ -28,7 +27,7 @@ class ViewController: UIViewController {
                 let button = cardButtons[index]
                 let randomPropertyIndex = cardDeck.count.arc4random
                 let cardProperty = cardDeck.remove(at: randomPropertyIndex)
-                let cardSymbol = cardProperty.0,numberOfSymbol = cardProperty.1, cardSymbolColor = cardProperty.2, cardSymbolStyle = cardProperty.3
+                let cardSymbol = cardProperty.0,numberOfSymbol = String(cardProperty.1.count), cardSymbolColor = cardProperty.1, cardSymbolStyle = cardProperty.2
                 
                 var symbolColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
                 switch cardSymbolColor {
@@ -95,7 +94,7 @@ class ViewController: UIViewController {
         visibleCards = 12
         game.score = 0
         scoreLabel.text = "Score: \(game.score)"
-        cardDeck += game.usedCombination
+        cardDeck = Card().cardDeck
         game.usedCombination.removeAll()
         for index in cardButtons.indices {
             let button = cardButtons[index]
