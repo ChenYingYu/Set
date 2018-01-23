@@ -90,6 +90,7 @@ class ViewController: UIViewController {
     @IBAction func addCardsButton(_ sender: UIButton) {
         addCards()
     }
+    
     @IBAction func newGameButton(_ sender: UIButton) {
         visibleCards = 12
         game.score = 0
@@ -101,15 +102,10 @@ class ViewController: UIViewController {
             var card = game.cards[index]
             button.layer.borderWidth = 0.0
             card.isSelected = false
-            game.cards[index].set = false
+            card.set = false
             game.cards[index].property.removeAll()
-            button.layer.borderWidth = 0.0
             cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
-            if index < visibleCards {
-                cardButtons[visibleCards].backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            } else {
-                cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
-            }
+            cardButtons[index].backgroundColor = index < visibleCards ? #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) : #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
         }
         assignProperty()
         game.indexOfFirstCard = nil

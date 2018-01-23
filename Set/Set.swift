@@ -17,6 +17,10 @@ class Set {
     
     var usedCombination = [(String, String, String, String)]()
     
+    var countPoints = { a, b -> Int in a + b }
+    
+    var score = 0
+
     func chooseCard (at index: Int) {
             if let matchIndexOne = indexOfFirstCard, let matchIndexTwo = indexOfSecondCard, matchIndexOne != index, matchIndexTwo != index {
                 // check if three cards form a "Set"
@@ -27,7 +31,7 @@ class Set {
                 // check four properties
                 for propertyIndex in 0..<firstCard.count {
                     if !(firstCard[propertyIndex] == secondCard[propertyIndex] && secondCard[propertyIndex] == thirdCard[propertyIndex]), !(firstCard[propertyIndex] != secondCard[propertyIndex] && secondCard[propertyIndex] != thirdCard[propertyIndex] && firstCard[propertyIndex] != thirdCard[propertyIndex]) {
-                        score -= 10
+                        score = countPoints(score, -10)
                         break
                     } else {
                         checkSetPorperty += 1
@@ -37,7 +41,7 @@ class Set {
                     cards[index].set = true
                     cards[matchIndexOne].set = true
                     cards[matchIndexTwo].set = true
-                    score += 30
+                    score = countPoints(score, 30)
                     cards[index].property.removeAll()
                     cards[matchIndexOne].property.removeAll()
                     cards[matchIndexTwo].property.removeAll()
@@ -50,11 +54,11 @@ class Set {
                     // deselect first card
                     indexOfFirstCard = indexOfSecondCard
                     indexOfSecondCard =  nil
-                    score -= 5
+                    score = countPoints(score, -5)
                 } else if indexOfSecondCard == index {
                     // deselect second card
                     indexOfSecondCard = nil
-                    score -= 5
+                    score = countPoints(score, -5)
                 } else if indexOfFirstCard == nil {
                     indexOfFirstCard = index
                     // deselect all cards
@@ -68,7 +72,6 @@ class Set {
         }
         cards[index].isSelected = cards[index].isSelected == true ? false : true
     }
-    var score = 0
     
     init(numberOfCards: Int) {
         for _ in 1...numberOfCards {
