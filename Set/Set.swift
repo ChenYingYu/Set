@@ -146,19 +146,18 @@ class Set {
         l = 2
         times = 0
     }
-    
+    // give hint when a player needs help
     func giveHint() {
         for cardIndex in cards.indices {
             for setCardIndex in setCardDeck.indices {
                 if cards[cardIndex].property == setCardDeck[setCardIndex] {
-                    cards[cardIndex].isSelected = true
                     cards[cardIndex].set = true
                 }
             }
         }
         setCardDeck.removeAll()
     }
-
+    
     init(numberOfCards: Int) {
         for _ in 1...numberOfCards {
             let card = Card()
