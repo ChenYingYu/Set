@@ -27,7 +27,7 @@ class ViewController: UIViewController {
                 let button = cardButtons[index]
                 let randomPropertyIndex = cardDeck.count.arc4random
                 let cardProperty = cardDeck.remove(at: randomPropertyIndex)
-                let cardSymbol = cardProperty.0,numberOfSymbol = String(cardProperty.1.count), cardSymbolColor = cardProperty.1, cardSymbolStyle = cardProperty.2
+                let cardSymbol = cardProperty.0,numberOfSymbol = String(cardProperty.0.count), cardSymbolColor = cardProperty.1, cardSymbolStyle = cardProperty.2
                 
                 var symbolColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
                 switch cardSymbolColor {
@@ -45,10 +45,12 @@ class ViewController: UIViewController {
                     button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.strokeColor: symbolColor,NSAttributedStringKey.strokeWidth: 10]), for: UIControlState.normal)
                 }
                 
+                let symbol = String(cardSymbol[cardSymbol.startIndex])
+                
                 // note this pattern is chosen before
-                game.visibleCardDeck += [[cardSymbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]]
+                game.visibleCardDeck += [[symbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]]
                 // store card's properties to model
-                game.cards[index].property = [cardSymbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]
+                game.cards[index].property = [symbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]
             } else if game.cards[index].property.isEmpty {
                 cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
                 cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
