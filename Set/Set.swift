@@ -15,7 +15,7 @@ class Set {
     
     var indexOfSecondCard: Int?
     
-    var usedCombination = [(String, String, String, String)]()
+    var visibleCardDeck = [[String]]()
     // get or lose points
     var countPoints = { a, b -> Int in a + b }
     
@@ -64,6 +64,9 @@ class Set {
                     cards[matchIndexTwo].set = true
                     timer()
                     score = countPoints(score, 30)
+                    visibleCardDeck = visibleCardDeck.filter { $0 != cards[index].property }
+                    visibleCardDeck = visibleCardDeck.filter { $0 != cards[matchIndexOne].property }
+                    visibleCardDeck = visibleCardDeck.filter { $0 != cards[matchIndexTwo].property }
                     cards[index].property.removeAll()
                     cards[matchIndexOne].property.removeAll()
                     cards[matchIndexTwo].property.removeAll()

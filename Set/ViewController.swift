@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     var cardDeck = Card().cardDeck
     func assignProperty() {
         for index in cardButtons.indices {
-            if game.cards[index].property.isEmpty, index < visibleCards, game.usedCombination.count < 81 {
+            if game.cards[index].property.isEmpty, index < visibleCards, game.visibleCardDeck.count < 81 {
                 game.cards[index].isSelected = false
                 let button = cardButtons[index]
                 let randomPropertyIndex = cardDeck.count.arc4random
@@ -46,7 +46,7 @@ class ViewController: UIViewController {
                 }
                 
                 // note this pattern is chosen before
-                game.usedCombination += [(cardSymbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle)]
+                game.visibleCardDeck += [[cardSymbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]]
                 // store card's properties to model
                 game.cards[index].property = [cardSymbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]
             } else if game.cards[index].property.isEmpty {
@@ -54,6 +54,7 @@ class ViewController: UIViewController {
                 cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             }
         }
+        print("\(game.visibleCardDeck)")
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
@@ -96,7 +97,7 @@ class ViewController: UIViewController {
         game.score = 0
         scoreLabel.text = "Score: \(game.score)"
         cardDeck = Card().cardDeck
-        game.usedCombination.removeAll()
+        game.visibleCardDeck.removeAll()
         for index in cardButtons.indices {
             let button = cardButtons[index]
             var card = game.cards[index]
