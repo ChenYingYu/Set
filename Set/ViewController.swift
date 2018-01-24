@@ -56,7 +56,6 @@ class ViewController: UIViewController {
                 cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             }
         }
-        print("\(game.visibleCardDeck)")
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
@@ -73,18 +72,24 @@ class ViewController: UIViewController {
     
     func addCards() {
         for index in cardButtons.indices {
+            // if we got set, replace those cards wth new three cards
             if game.cards[index].property.isEmpty, index < visibleCards {
+                game.checkIfExistSet()
                 assignProperty()
                 updateViewFromModel()
+                print("\(game.visibleCardDeck)")
                 return
             }
         }
+        // or we add three new cards
         if visibleCards < 24 {
+            game.checkIfExistSet()
             for _ in 0..<3 {
                 cardButtons[visibleCards].backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
                 visibleCards += 1
             }
             assignProperty()
+            updateViewFromModel()
         } else {
             print("can not add more cards")
         }

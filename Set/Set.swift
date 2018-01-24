@@ -97,7 +97,52 @@ class Set {
         }
         cards[index].isSelected = cards[index].isSelected == true ? false : true
     }
+    //check if exist visible Set
+    var h = 0, m = 1, l = 2, times = 0
     
+    var checkSetPorperty = 0
+    
+    func checkIfExistSet() {
+        while h < visibleCardDeck.count - 2 {
+            while m < visibleCardDeck.count - 1 {
+                while l < visibleCardDeck.count {
+                    for index in 0..<4 {
+                        times += 1
+                        // misMatch
+                        if !(visibleCardDeck[h][index] == visibleCardDeck[m][index] && visibleCardDeck[m][index] == visibleCardDeck[l][index]), !(visibleCardDeck[h][index] != visibleCardDeck[m][index] && visibleCardDeck[m][index] != visibleCardDeck[l][index] && visibleCardDeck[h][index] != visibleCardDeck[l][index]) {
+                            break
+                        } else {
+                            checkSetPorperty += 1
+                        }
+                    }
+                    
+                    if checkSetPorperty == 4 {
+                        score = countPoints(score, -25)
+                        print("Has a visible Set")
+                        print("Compare times: \(times)\n 1st: \(visibleCardDeck[h])\n 2nd: \(visibleCardDeck[m])\n 3rd: \(visibleCardDeck[l])")
+                        h = 0
+                        m = 1
+                        l = 2
+                        times = 0
+                        checkSetPorperty = 0
+                        return
+                    }
+                    checkSetPorperty = 0
+                    l += 1
+                }
+                m += 1
+                l = m + 1
+            }
+            h += 1
+            m = h + 1
+            l = m + 1
+        }
+        h = 0
+        m = 1
+        l = 2
+        times = 0
+    }
+
     init(numberOfCards: Int) {
         for _ in 1...numberOfCards {
             let card = Card()
