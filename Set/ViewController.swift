@@ -99,6 +99,12 @@ class ViewController: UIViewController {
         addCards()
     }
     
+    @IBAction func hintButton(_ sender: UIButton) {
+        game.checkIfExistSet()
+        game.giveHint()
+        updateViewFromModel()
+    }
+    
     @IBAction func newGameButton(_ sender: UIButton) {
         visibleCards = 12
         game.score = 0

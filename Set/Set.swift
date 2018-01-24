@@ -102,6 +102,8 @@ class Set {
     
     var checkSetPorperty = 0
     
+    var setCardDeck = [[String]]()
+    
     func checkIfExistSet() {
         while h < visibleCardDeck.count - 2 {
             while m < visibleCardDeck.count - 1 {
@@ -120,6 +122,8 @@ class Set {
                         score = countPoints(score, -25)
                         print("Has a visible Set")
                         print("Compare times: \(times)\n 1st: \(visibleCardDeck[h])\n 2nd: \(visibleCardDeck[m])\n 3rd: \(visibleCardDeck[l])")
+                        setCardDeck += [visibleCardDeck[h], visibleCardDeck[m],visibleCardDeck[l]]
+                        print("\(setCardDeck)")
                         h = 0
                         m = 1
                         l = 2
@@ -141,6 +145,18 @@ class Set {
         m = 1
         l = 2
         times = 0
+    }
+    
+    func giveHint() {
+        for cardIndex in cards.indices {
+            for setCardIndex in setCardDeck.indices {
+                if cards[cardIndex].property == setCardDeck[setCardIndex] {
+                    cards[cardIndex].isSelected = true
+                    cards[cardIndex].set = true
+                }
+            }
+        }
+        setCardDeck.removeAll()
     }
 
     init(numberOfCards: Int) {
