@@ -338,10 +338,10 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBw-s7-WwK">
-                                <rect key="frame" x="93" y="642" width="190" height="60"/>
+                                <rect key="frame" x="91.666666666666686" y="642" width="193" height="60"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
-                                <state key="normal" title="New Game"/>
+                                <state key="normal" title="Start Game"/>
                                 <connections>
                                     <action selector="newGameButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nbi-Ne-YWG"/>
                                 </connections>
@@ -369,6 +369,20 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="🙂" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xUW-nm-gIz">
+                                <rect key="frame" x="117" y="465" width="139" height="101"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="80"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VRG-Dl-X4x">
+                                <rect key="frame" x="264" y="471" width="95" height="88"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -382,6 +396,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="countLabel" destination="VRG-Dl-X4x" id="0Fb-Zb-npw"/>
+                        <outlet property="emojiLabel" destination="xUW-nm-gIz" id="LdM-C8-Pq3"/>
                         <outlet property="scoreLabel" destination="PZO-Gf-6Ni" id="yxF-uy-NHK"/>
                         <outletCollection property="cardButtons" destination="LzG-xe-gcY" collectionClass="NSMutableArray" id="si1-7W-0aM"/>
                         <outletCollection property="cardButtons" destination="Qq2-ti-1vQ" collectionClass="NSMutableArray" id="IUd-r7-963"/>
@@ -411,7 +427,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.5" y="114"/>
+            <point key="canvasLocation" x="135.19999999999999" y="113.79310344827587"/>
         </scene>
     </scenes>
 </document>

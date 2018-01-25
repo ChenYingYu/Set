@@ -11,51 +11,55 @@ import UIKit
 class ViewController: UIViewController {
     lazy var game = Set(numberOfCards: cardButtons.count)
 
-    // record which patterns are chosen before
     @IBOutlet var cardButtons: [UIButton]! {
         didSet {
             assignProperty()
         }
     }
+    // use timer when v.s. com, it will pick a Set every 10 seconds
+    var computeCounter = 0.0
     
     var visibleCards = 12
     var cardDeck = Card().cardDeck
     func assignProperty() {
-        for index in cardButtons.indices {
-            if game.cards[index].property.isEmpty, index < visibleCards, game.visibleCardDeck.count < 81 {
-                game.cards[index].isSelected = false
-                let button = cardButtons[index]
-                let randomPropertyIndex = cardDeck.count.arc4random
-                let cardProperty = cardDeck.remove(at: randomPropertyIndex)
-                let cardSymbol = cardProperty.0,numberOfSymbol = String(cardProperty.0.count), cardSymbolColor = cardProperty.1, cardSymbolStyle = cardProperty.2
-                
-                var symbolColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
-                switch cardSymbolColor {
-                case "blue": symbolColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
-                case "green": symbolColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
-                case "red": symbolColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-                default: return
+            for index in cardButtons.indices {
+                if game.cards[index].property.isEmpty, index < visibleCards, cardDeck.count > 0 {
+                    game.cards[index].isSelected = false
+                    let button = cardButtons[index]
+                    let randomPropertyIndex = cardDeck.count.arc4random
+                    let cardProperty = cardDeck.remove(at: randomPropertyIndex)
+                    let cardSymbol = cardProperty.0,numberOfSymbol = String(cardProperty.0.count), cardSymbolColor = cardProperty.1, cardSymbolStyle = cardProperty.2
+                    
+                    var symbolColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
+                    switch cardSymbolColor {
+                    case "blue": symbolColor = #colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)
+                    case "green": symbolColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+                    case "red": symbolColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+                    default: return
+                    }
+                    
+                    // put symbol on the card
+                    if cardSymbolStyle == "filled" { button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.foregroundColor: symbolColor]), for: UIControlState.normal)
+                    } else if cardSymbolStyle == "shade" {
+                        button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.foregroundColor: UIColor.withAlphaComponent(symbolColor)(0.25)]), for: UIControlState.normal)
+                    } else if cardSymbolStyle == "outline" {
+                        button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.strokeColor: symbolColor,NSAttributedStringKey.strokeWidth: 10]), for: UIControlState.normal)
+                    }
+                    
+                    let symbol = String(cardSymbol[cardSymbol.startIndex])
+                    
+                    // note this pattern is chosen before
+                    game.visibleCardDeck += [[symbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]]
+                    // store card's properties to model
+                    game.cards[index].property = [symbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]
+                } else if game.cards[index].property.isEmpty, cardDeck.count < 1 {
+                    cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
+                    cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
+                    game.computeTimer.invalidate()
+                    print("Run out of cards")
                 }
-
-                // put symbol on the card
-                if cardSymbolStyle == "filled" { button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.foregroundColor: symbolColor]), for: UIControlState.normal)
-                } else if cardSymbolStyle == "shade" {
-                    button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.foregroundColor: UIColor.withAlphaComponent(symbolColor)(0.25)]), for: UIControlState.normal)
-                } else if cardSymbolStyle == "outline" {
-                    button.setAttributedTitle(NSAttributedString(string: cardSymbol, attributes: [NSAttributedStringKey.strokeColor: symbolColor,NSAttributedStringKey.strokeWidth: 10]), for: UIControlState.normal)
-                }
-                
-                let symbol = String(cardSymbol[cardSymbol.startIndex])
-                
-                // note this pattern is chosen before
-                game.visibleCardDeck += [[symbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]]
-                // store card's properties to model
-                game.cards[index].property = [symbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]
-            } else if game.cards[index].property.isEmpty {
-                cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
-                cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             }
-        }
+        
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
@@ -74,16 +78,13 @@ class ViewController: UIViewController {
         for index in cardButtons.indices {
             // if we got set, replace those cards wth new three cards
             if game.cards[index].property.isEmpty, index < visibleCards {
-                game.checkIfExistSet()
                 assignProperty()
                 updateViewFromModel()
-                print("\(game.visibleCardDeck)")
                 return
             }
         }
         // or we add three new cards
         if visibleCards < 24 {
-            game.checkIfExistSet()
             for _ in 0..<3 {
                 cardButtons[visibleCards].backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
                 visibleCards += 1
@@ -96,16 +97,60 @@ class ViewController: UIViewController {
     }
     
     @IBAction func addCardsButton(_ sender: UIButton) {
+        game.checkIfExistSet()
+        game.checkOut()
         addCards()
     }
     
     @IBAction func hintButton(_ sender: UIButton) {
         game.checkIfExistSet()
+        game.checkOut()
         game.giveHint()
+        game.setCardDeck.removeAll()
         updateViewFromModel()
     }
     
+    func updateEmoji() {
+        switch game.score {
+        case  let x where x < -50: emojiLabel.text = "😂"
+        case _ where game.score < 0: emojiLabel.text = "🙂"
+        case 0..<50: emojiLabel.text = "😁"
+        default: emojiLabel.text = "😱"
+        }
+    }
+    
+    @objc func comPickASet() {
+        if computeCounter < 0.5 {
+            emojiLabel.text = "🤔"
+            computeCounter += 0.5
+        } else if computeCounter == 0.5 {
+            computeCounter += 0.5
+            game.checkIfExistSet()
+            game.giveHint()
+            updateViewFromModel()
+            updateEmoji()
+        } else {
+            game.removeSetCardProperty()
+            addCards()
+            print("cardDeck left: \(cardDeck.count)")
+            game.setCardDeck.removeAll()
+            computeCounter = 0.0
+            game.computeTimer.invalidate()
+            if cardDeck.count > 0 {
+            game.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+            } else {
+                print("Com Run out of cards")
+            }
+        }
+        countLabel.text = String(computeCounter)
+    }
+    @IBOutlet weak var countLabel: UILabel!
+    
+    @IBOutlet weak var emojiLabel: UILabel!
+    
     @IBAction func newGameButton(_ sender: UIButton) {
+        game.computeTimer.invalidate()
+        game.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
         visibleCards = 12
         game.score = 0
         scoreLabel.text = "Score: \(game.score)"

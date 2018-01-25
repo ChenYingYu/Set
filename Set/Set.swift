@@ -20,6 +20,11 @@ class Set {
     var countPoints = { a, b -> Int in a + b }
     
     var score = 0
+    // use timer when v.s. com, it will pick a Set every 10 seconds
+    var computeTimer = Timer()
+    
+    var computeCounter = 0.0
+
     // speed of play
     var startTime = Date()
     
@@ -63,13 +68,17 @@ class Set {
                     cards[matchIndexOne].set = true
                     cards[matchIndexTwo].set = true
                     timer()
+                    computeTimer.invalidate()
                     score = countPoints(score, 30)
+                    // remove set cards from visibleCardDeck
                     visibleCardDeck = visibleCardDeck.filter { $0 != cards[index].property }
                     visibleCardDeck = visibleCardDeck.filter { $0 != cards[matchIndexOne].property }
                     visibleCardDeck = visibleCardDeck.filter { $0 != cards[matchIndexTwo].property }
+                    // remove their properties
                     cards[index].property.removeAll()
                     cards[matchIndexOne].property.removeAll()
                     cards[matchIndexTwo].property.removeAll()
+//                    computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(), userInfo: nil, repeats: true)
                 }
                 indexOfFirstCard = nil
                 indexOfSecondCard = nil
@@ -104,6 +113,23 @@ class Set {
     
     var setCardDeck = [[String]]()
     
+    func checkOut() {
+        if !setCardDeck.isEmpty {
+            score = countPoints(score, -25)
+        }
+    }
+    
+    func removeSetCardProperty() {
+        for cardIndex in cards.indices {
+            for setCardIndex in setCardDeck.indices {
+                if cards[cardIndex].property == setCardDeck[setCardIndex] {
+                    visibleCardDeck = visibleCardDeck.filter { $0 != cards[cardIndex].property }
+                    cards[cardIndex].property.removeAll()
+                }
+            }
+        }
+    }
+    
     func checkIfExistSet() {
         while h < visibleCardDeck.count - 2 {
             while m < visibleCardDeck.count - 1 {
@@ -119,11 +145,9 @@ class Set {
                     }
                     
                     if checkSetPorperty == 4 {
-                        score = countPoints(score, -25)
                         print("Has a visible Set")
                         print("Compare times: \(times)\n 1st: \(visibleCardDeck[h])\n 2nd: \(visibleCardDeck[m])\n 3rd: \(visibleCardDeck[l])")
                         setCardDeck += [visibleCardDeck[h], visibleCardDeck[m],visibleCardDeck[l]]
-                        print("\(setCardDeck)")
                         h = 0
                         m = 1
                         l = 2
@@ -155,7 +179,6 @@ class Set {
                 }
             }
         }
-        setCardDeck.removeAll()
     }
     
     init(numberOfCards: Int) {
