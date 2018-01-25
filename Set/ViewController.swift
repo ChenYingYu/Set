@@ -24,7 +24,6 @@ class ViewController: UIViewController {
     func assignProperty() {
             for index in cardButtons.indices {
                 if game.cards[index].property.isEmpty, index < visibleCards, cardDeck.count > 0 {
-                    game.cards[index].isSelected = false
                     let button = cardButtons[index]
                     let randomPropertyIndex = cardDeck.count.arc4random
                     let cardProperty = cardDeck.remove(at: randomPropertyIndex)
@@ -47,11 +46,12 @@ class ViewController: UIViewController {
                     }
                     
                     let symbol = String(cardSymbol[cardSymbol.startIndex])
-                    
-                    // note this pattern is chosen before
-                    game.visibleCardDeck += [[symbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]]
+
                     // store card's properties to model
                     game.cards[index].property = [symbol, numberOfSymbol, cardSymbolColor, cardSymbolStyle]
+                    
+                    // note this pattern is chosen before
+                    game.visibleCardDeck.append(game.cards[index])
                 } else if game.cards[index].property.isEmpty, cardDeck.count < 1 {
                     cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
                     cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
@@ -66,7 +66,7 @@ class ViewController: UIViewController {
         if let cardNumber = cardButtons.index(of: sender) {
             if cardNumber < visibleCards, !game.cards[cardNumber].property.isEmpty {
                 assignProperty()
-                game.chooseCardAnotherVersion(at: cardNumber)
+                game.chooseCard(at: cardNumber)
                 updateViewFromModel()
             }
         } else {
@@ -105,9 +105,8 @@ class ViewController: UIViewController {
     @IBAction func hintButton(_ sender: UIButton) {
         game.checkIfExistSet()
         game.checkOut()
-        game.giveHint()
-        game.setCardDeck.removeAll()
         updateViewFromModel()
+        game.setCardDeck.removeAll()
     }
     
     func updateEmoji() {
@@ -126,7 +125,6 @@ class ViewController: UIViewController {
         } else if computeCounter == 0.5 {
             computeCounter += 0.5
             game.checkIfExistSet()
-            game.giveHint()
             updateViewFromModel()
             updateEmoji()
         } else {
@@ -158,10 +156,7 @@ class ViewController: UIViewController {
         game.visibleCardDeck.removeAll()
         for index in cardButtons.indices {
             let button = cardButtons[index]
-            var card = game.cards[index]
             button.layer.borderWidth = 0.0
-            card.isSelected = false
-            card.set = false
             game.cards[index].property.removeAll()
             cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
             cardButtons[index].backgroundColor = index < visibleCards ? #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) : #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
@@ -184,11 +179,11 @@ class ViewController: UIViewController {
             } else {
                 button.layer.borderWidth = 0.0
             }
-            if card.set == true {
+            if game.setCardDeck.contains(where: { $0 == card }) {
                 button.layer.borderWidth = 6.0
                 button.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
                 button.layer.cornerRadius = 8.0
-                game.cards[index].set = false
+                game.setCardDeck = game.setCardDeck.filter { $0 != card}
             }
         }
         scoreLabel.text = "Score: \(game.score)"

@@ -10,11 +10,13 @@ import Foundation
 
 struct Card
 {
-    var isSelected = false
     var property = [String]()
     var cardDeck = [(String, String, String)]()
-    var set = false
     
+//    var symbol: Symbol
+//    var color: Color
+//    var shade: Shade
+//    
     enum Symbol: String {
         case circle = "●"
         case triangle = "▲"
@@ -60,7 +62,7 @@ struct Card
                     cardDeck.append((symbol.rawValue,color.rawValue,shade.rawValue))
                 }
             }
-            
+
         }
     }
 }
