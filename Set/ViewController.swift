@@ -66,7 +66,7 @@ class ViewController: UIViewController {
         if let cardNumber = cardButtons.index(of: sender) {
             if cardNumber < visibleCards, !game.cards[cardNumber].property.isEmpty {
                 assignProperty()
-                game.chooseCard(at: cardNumber)
+                game.chooseCardAnotherVersion(at: cardNumber)
                 updateViewFromModel()
             }
         } else {
@@ -177,7 +177,7 @@ class ViewController: UIViewController {
         for index in cardButtons.indices {
             let button = cardButtons[index]
             let card = game.cards[index]
-            if card.isSelected == true {
+            if game.selectedCardDeck.contains(where: { $0 == card }) {
                 button.layer.borderWidth = 5.0
                 button.layer.borderColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
                 button.layer.cornerRadius = 8.0

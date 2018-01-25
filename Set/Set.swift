@@ -45,6 +45,51 @@ class Set {
         startTime = Date()
     }
     
+    var selectedCardDeck = [Card]()
+    
+    func chooseCardAnotherVersion (at index: Int) {
+        let chosenCard = cards[index]
+        print("\(chosenCard.property)")
+        if !(selectedCardDeck.contains { $0 == chosenCard }) {
+            if selectedCardDeck.count == 3 {
+                selectedCardDeck.removeAll()
+            }
+            selectedCardDeck.append(chosenCard)
+            if selectedCardDeck.count == 3 {
+                var checkSetPorperty = 0
+                let firstCard = selectedCardDeck[0].property
+                let secondCard = selectedCardDeck[1].property
+                let thirdCard = selectedCardDeck[2].property
+                for compareIndex in 0...3 {
+                    if !(firstCard[compareIndex] == secondCard[compareIndex] && secondCard[compareIndex] == thirdCard[compareIndex]), !(firstCard[compareIndex] != secondCard[compareIndex] && secondCard[compareIndex] != thirdCard[compareIndex] && firstCard[compareIndex] != thirdCard[compareIndex]) {
+                        startTime = Date()
+                        score = countPoints(score, -15)
+                        break
+                    } else {
+                        checkSetPorperty += 1
+                    }
+                }
+                if checkSetPorperty == 4 {
+                    for setCardIndex in cards.indices {
+                        if selectedCardDeck.contains(where: { $0 == cards[setCardIndex] }) {
+                            cards[setCardIndex].set = true
+                            // remove set cards from visibleCardDeck
+                            visibleCardDeck = visibleCardDeck.filter { $0 != cards[setCardIndex].property }
+                            // remove their properties
+                            cards[setCardIndex].property.removeAll()                        }
+                    }
+                    timer()
+                    computeTimer.invalidate()
+                    score = countPoints(score, 30)
+                    selectedCardDeck.removeAll()
+                }
+            }
+        } else {
+            score = countPoints(score, -5)
+            selectedCardDeck = selectedCardDeck.filter { $0 != chosenCard}
+        }
+    }
+    
     func chooseCard (at index: Int) {
             if let matchIndexOne = indexOfFirstCard, let matchIndexTwo = indexOfSecondCard, matchIndexOne != index, matchIndexTwo != index {
                 // check if three cards form a "Set"
@@ -187,4 +232,13 @@ class Set {
             cards += [card]
         }
     }
+}
+
+extension Card: Equatable {
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.isSelected == rhs.isSelected &&
+        lhs.property == rhs.property &&
+        lhs.set == rhs.set
+    }
+    
 }
