@@ -11,14 +11,8 @@ import Foundation
 class Set {
     var cards = [Card]()
     
-    var indexOfFirstCard: Int?
-    
-    var indexOfSecondCard: Int?
-    
     var visibleCardDeck = [Card]()
-    // get or lose points
-    var countPoints = { a, b -> Int in a + b }
-    
+    // note the score
     var score = 0
     // use timer when v.s. com, it will pick a Set every 10 seconds
     var computeTimer = Timer()
@@ -35,11 +29,11 @@ class Set {
         let timeInterval: Double = endTime.timeIntervalSince(startTime)
         switch timeInterval {
         case 0..<5.0:
-            score = countPoints(score, 20)
+            score += 20
         case 5.0..<10.0:
-            score = countPoints(score, 10)
+            score += 10
         default:
-            score = countPoints(score, 0)
+            score += 0
         }
         print("time: \(timeInterval)")
         startTime = Date()
@@ -67,7 +61,7 @@ class Set {
                 for compareIndex in 0...3 {
                     if !(firstCard.property[compareIndex] == secondCard.property[compareIndex] && secondCard.property[compareIndex] == thirdCard.property[compareIndex]), !(firstCard.property[compareIndex] != secondCard.property[compareIndex] && secondCard.property[compareIndex] != thirdCard.property[compareIndex] && firstCard.property[compareIndex] != thirdCard.property[compareIndex]) {
                         startTime = Date()
-                        score = countPoints(score, -15)
+                        score -= 15
                         break
                     } else {
                         checkSetPorperty += 1
@@ -77,26 +71,18 @@ class Set {
                 if checkSetPorperty == 4 {
                     setCardDeck += [firstCard, secondCard, thirdCard]
                     checkSetPorperty = 0
-//                    for index in cards.indices {
-//                        if selectedCardDeck.contains(where: { $0 == cards[index] }) {
-//                            setCardDeck += [cards[index]]
-//                            print("setCardDeck.count : \(setCardDeck.count)")
-//                            // remove set cards from visibleCardDeck
                             visibleCardDeck = visibleCardDeck.filter { $0 != firstCard }
                     visibleCardDeck = visibleCardDeck.filter { $0 != secondCard }
                     visibleCardDeck = visibleCardDeck.filter { $0 != thirdCard }
-//                            // remove their properties
-//                            cards[index].property.removeAll()
-//                        }
-//                    }
+
                     print("setCardDeck\(setCardDeck[0].property)\n\(setCardDeck[1].property)\n\(setCardDeck[2].property)\n")
                     timer()
                     computeTimer.invalidate()
-                    score = countPoints(score, 30)
+                    score += 30
                 }
             }
         } else {
-            score = countPoints(score, -5)
+            score -= 5
             selectedCardDeck = selectedCardDeck.filter { $0 != chosenCard}
         }
     }
@@ -104,9 +90,9 @@ class Set {
     //check if there exists a visible Set
     var h = 0, m = 1, l = 2, times = 0
     
-    func checkOut() {
+    func penalize() {
         if !setCardDeck.isEmpty {
-            score = countPoints(score, -25)
+            score -= 25
         }
     }
     

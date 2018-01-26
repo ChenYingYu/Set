@@ -9,6 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
+    // implement Set model
     lazy var game = Set(numberOfCards: cardButtons.count)
 
     @IBOutlet var cardButtons: [UIButton]! {
@@ -18,9 +19,11 @@ class ViewController: UIViewController {
     }
     // use timer when v.s. com, it will pick a Set every 10 seconds
     var computeCounter = 0.0
-    
+    // note number of visible cards
     var visibleCards = 12
+    
     var cardDeck = Card().cardDeck
+    // pick one card in cardDeck, and assign its properties to UIButton
     func assignProperty() {
             for index in cardButtons.indices {
                 if game.cards[index].property.isEmpty, index < visibleCards, cardDeck.count > 0 {
@@ -53,6 +56,7 @@ class ViewController: UIViewController {
                     // note this pattern is chosen before
                     game.visibleCardDeck.append(game.cards[index])
                 } else if game.cards[index].property.isEmpty, cardDeck.count < 1 {
+                    // UIButton needs new card but we run out of cards, so we set the button invisible
                     cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
                     cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
                     game.computeTimer.invalidate()
@@ -86,26 +90,26 @@ class ViewController: UIViewController {
         }
         // or we add three new cards
         if visibleCards < 24 {
+            game.checkIfExistSet()
+            game.penalize()
             for _ in 0..<3 {
                 cardButtons[visibleCards].backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
                 visibleCards += 1
             }
             assignProperty()
             updateViewFromModel()
+            game.removeSetCardProperty()
         } else {
             print("can not add more cards")
         }
     }
     
     @IBAction func addCardsButton(_ sender: UIButton) {
-        game.checkIfExistSet()
-        game.checkOut()
         addCards()
     }
     
     @IBAction func hintButton(_ sender: UIButton) {
         game.checkIfExistSet()
-        game.checkOut()
         updateViewFromModel()
         game.setCardDeck.removeAll()
     }
@@ -149,31 +153,29 @@ class ViewController: UIViewController {
     
     @IBAction func newGameButton(_ sender: UIButton) {
         game.computeTimer.invalidate()
-        game.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+//        game.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
         visibleCards = 12
         game.score = 0
-        scoreLabel.text = "Score: \(game.score)"
-        cardDeck = Card().cardDeck
+        game.selectedCardDeck.removeAll()
+        game.setCardDeck.removeAll()
         game.visibleCardDeck.removeAll()
+        cardDeck = Card().cardDeck
         for index in cardButtons.indices {
-            let button = cardButtons[index]
-            button.layer.borderWidth = 0.0
             game.cards[index].property.removeAll()
             cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
-            cardButtons[index].backgroundColor = index < visibleCards ? #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) : #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
         }
         assignProperty()
-        game.indexOfFirstCard = nil
-        game.indexOfSecondCard = nil
+        updateViewFromModel()
     }
     
     @IBOutlet weak var scoreLabel: UILabel!
     
     func updateViewFromModel() {
-        print("VIEW setCeadDeck: \(game.setCardDeck.count)")
+        print("VIEW setCardDeck: \(game.setCardDeck.count)")
         for index in cardButtons.indices {
             let button = cardButtons[index]
             let card = game.cards[index]
+            button.backgroundColor = index < visibleCards ? #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) : #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
             if game.setCardDeck.contains(where: { $0 == card }) {
                 button.layer.borderWidth = 6.0
                 button.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
@@ -186,7 +188,6 @@ class ViewController: UIViewController {
             } else {
                 button.layer.borderWidth = 0.0
             }
-            
         }
         scoreLabel.text = "Score: \(game.score)"
     }
