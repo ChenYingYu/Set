@@ -81,6 +81,14 @@ class ViewController: UIViewController {
                     versus.computeCounter = 0.0
                     versus.computeTimer.invalidate()
                     versus.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+                    me += 1
+                    playerScore.text = "me: \(me)"
+                    if me == 10 {
+                        endGame()
+                        emojiLabel.text = "😭"
+                        playerScore.text = "YOU"
+                        comScore.text = "WIN !"
+                    }
                 }
                 game.removeSetCardProperty()
             }
@@ -151,20 +159,39 @@ class ViewController: UIViewController {
             versus.computeTimer.invalidate()
             if cardDeck.count > 0 {
             versus.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+                com += 1
+                comScore.text = "com: \(com)"
+                if com == 10 {
+                    endGame()
+                    emojiLabel.text = "😝"
+                    playerScore.text = "YOU"
+                    comScore.text = "LOSE~"
+                }
             } else {
                 print("Com Run out of cards")
             }
         }
-        countLabel.text = String(versus.computeCounter)
+//        countLabel.text = String(versus.computeCounter)
     }
-    @IBOutlet weak var countLabel: UILabel!
+    @IBOutlet weak var playerScore: UILabel!
+    
+    @IBOutlet weak var comScore: UILabel!
     
     @IBOutlet weak var emojiLabel: UILabel!
     
+    var com = 0
+    
+    var me = 0
+    
     @IBAction func newGameButton(_ sender: UIButton) {
+        scoreLabel.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         vsComMode = false
         versus.computeCounter = 0
         versus.computeTimer.invalidate()
+        com = 0
+        me = 0
+        comScore.text = ""
+        playerScore.text = ""
         emojiLabel.text = "🙂"
         reset()
     }
@@ -172,17 +199,31 @@ class ViewController: UIViewController {
     var vsComMode = false
     
     @IBAction func vsComButton(_ sender: UIButton) {
+        scoreLabel.textColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
         vsComMode = true
         versus.computeCounter = 0
         versus.computeTimer.invalidate()
         versus.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+        com = 0
+        me = 0
+        comScore.text = "com: \(com)"
+        playerScore.text = "me: \(me)"
         reset()
+    }
+    
+    func endGame() {
+        versus.computeTimer.invalidate()
+        for index in cardButtons.indices {
+            game.cards[index].property.removeAll()
+            cardButtons[index].layer.borderWidth = 0.0
+            cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
+            cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
+        }
     }
     
     func reset() {
         visibleCards = 12
         game.score = 0
-        countLabel.text = String(versus.computeCounter)
         game.selectedCardDeck.removeAll()
         game.setCardDeck.removeAll()
         game.visibleCardDeck.removeAll()

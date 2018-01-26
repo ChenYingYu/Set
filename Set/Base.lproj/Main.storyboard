@@ -393,7 +393,14 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VRG-Dl-X4x">
                                 <rect key="frame" x="264" y="471" width="95" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S6q-Ir-Db4">
+                                <rect key="frame" x="19" y="471" width="95" height="88"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -411,8 +418,9 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="countLabel" destination="VRG-Dl-X4x" id="0Fb-Zb-npw"/>
+                        <outlet property="comScore" destination="VRG-Dl-X4x" id="0Fb-Zb-npw"/>
                         <outlet property="emojiLabel" destination="xUW-nm-gIz" id="LdM-C8-Pq3"/>
+                        <outlet property="playerScore" destination="S6q-Ir-Db4" id="aB3-kT-hJ5"/>
                         <outlet property="scoreLabel" destination="PZO-Gf-6Ni" id="yxF-uy-NHK"/>
                         <outletCollection property="cardButtons" destination="LzG-xe-gcY" collectionClass="NSMutableArray" id="si1-7W-0aM"/>
                         <outletCollection property="cardButtons" destination="Qq2-ti-1vQ" collectionClass="NSMutableArray" id="IUd-r7-963"/>
