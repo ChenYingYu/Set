@@ -74,10 +74,8 @@ class Set {
                             visibleCardDeck = visibleCardDeck.filter { $0 != firstCard }
                     visibleCardDeck = visibleCardDeck.filter { $0 != secondCard }
                     visibleCardDeck = visibleCardDeck.filter { $0 != thirdCard }
-
                     print("setCardDeck\(setCardDeck[0].property)\n\(setCardDeck[1].property)\n\(setCardDeck[2].property)\n")
                     timer()
-                    computeTimer.invalidate()
                     score += 30
                 }
             }

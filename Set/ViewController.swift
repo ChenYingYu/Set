@@ -12,6 +12,8 @@ class ViewController: UIViewController {
     // implement Set model
     lazy var game = Set(numberOfCards: cardButtons.count)
 
+    var versus = Against()
+    
     @IBOutlet var cardButtons: [UIButton]! {
         didSet {
             assignProperty()
@@ -59,12 +61,14 @@ class ViewController: UIViewController {
                     // UIButton needs new card but we run out of cards, so we set the button invisible
                     cardButtons[index].backgroundColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1)
                     cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControlState.normal)
-                    game.computeTimer.invalidate()
+                    versus.computeTimer.invalidate()
                     print("Run out of cards")
                 }
             }
         
     }
+    
+    var playerSetFirst = false
     
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender) {
@@ -72,7 +76,13 @@ class ViewController: UIViewController {
                 assignProperty()
                 game.chooseCard(at: cardNumber)
                 updateViewFromModel()
-                game.removeSetCardProperty()
+                if !game.setCardDeck.isEmpty {
+                    playerSetFirst = true
+                    versus.computeCounter = 0.0
+                    versus.computeTimer.invalidate()
+                    versus.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+                    game.removeSetCardProperty()
+                }
             }
         } else {
             print("chosen card was not in cardButtons")
@@ -115,39 +125,45 @@ class ViewController: UIViewController {
     }
     
     @objc func comPickASet() {
-        if computeCounter < 4 {
-            emojiLabel.text = "🤔"
-            computeCounter += 0.5
-        } else if computeCounter < 6 {
-            emojiLabel.text = "😏"
-            computeCounter += 0.5
-        } else if computeCounter == 6 {
-            computeCounter += 0.5
+        let emoji = versus.emojiChoices
+        if versus.computeCounter < 4 {
+            if playerSetFirst {
+                emojiLabel.text = emoji[3]
+            } else {
+                emojiLabel.text = emoji[0]
+            }
+            versus.computeCounter += 0.5
+        } else if versus.computeCounter < 6 {
+            playerSetFirst = false
+            emojiLabel.text = emoji[1]
+            versus.computeCounter += 0.5
+        } else if versus.computeCounter == 6 {
+            versus.computeCounter += 0.5
             game.checkIfExistSet()
             updateViewFromModel()
-            emojiLabel.text = "😁"
+            emojiLabel.text = emoji[2]
         } else {
             game.removeSetCardProperty()
             addCards()
             print("cardDeck left: \(cardDeck.count)")
             game.setCardDeck.removeAll()
-            computeCounter = 0.0
-            game.computeTimer.invalidate()
+            versus.computeCounter = 0.0
+            versus.computeTimer.invalidate()
             if cardDeck.count > 0 {
-            game.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+            versus.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
             } else {
                 print("Com Run out of cards")
             }
         }
-        countLabel.text = String(computeCounter)
+        countLabel.text = String(versus.computeCounter)
     }
     @IBOutlet weak var countLabel: UILabel!
     
     @IBOutlet weak var emojiLabel: UILabel!
     
     @IBAction func newGameButton(_ sender: UIButton) {
-        game.computeTimer.invalidate()
-        game.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+        versus.computeTimer.invalidate()
+        versus.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
         visibleCards = 12
         game.score = 0
         game.selectedCardDeck.removeAll()

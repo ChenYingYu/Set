@@ -13,10 +13,6 @@ struct Card
     var property = [String]()
     var cardDeck = [(String, String, String)]()
     
-//    var symbol: Symbol
-//    var color: Color
-//    var shade: Shade
-//    
     enum Symbol: String {
         case circle = "●"
         case triangle = "▲"
