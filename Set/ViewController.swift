@@ -114,24 +114,18 @@ class ViewController: UIViewController {
         game.setCardDeck.removeAll()
     }
     
-    func updateEmoji() {
-        switch game.score {
-        case  let x where x < -50: emojiLabel.text = "😂"
-        case _ where game.score < 0: emojiLabel.text = "🙂"
-        case 0..<50: emojiLabel.text = "😁"
-        default: emojiLabel.text = "😱"
-        }
-    }
-    
     @objc func comPickASet() {
-        if computeCounter < 0.5 {
+        if computeCounter < 4 {
             emojiLabel.text = "🤔"
             computeCounter += 0.5
-        } else if computeCounter == 0.5 {
+        } else if computeCounter < 6 {
+            emojiLabel.text = "😏"
+            computeCounter += 0.5
+        } else if computeCounter == 6 {
             computeCounter += 0.5
             game.checkIfExistSet()
             updateViewFromModel()
-            updateEmoji()
+            emojiLabel.text = "😁"
         } else {
             game.removeSetCardProperty()
             addCards()
@@ -153,7 +147,7 @@ class ViewController: UIViewController {
     
     @IBAction func newGameButton(_ sender: UIButton) {
         game.computeTimer.invalidate()
-//        game.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+        game.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
         visibleCards = 12
         game.score = 0
         game.selectedCardDeck.removeAll()
