@@ -337,15 +337,29 @@
                                     <action selector="touchCard:" destination="BYZ-38-t0r" eventType="touchUpInside" id="t6Y-nV-fSL"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBw-s7-WwK">
-                                <rect key="frame" x="91.666666666666686" y="642" width="193" height="60"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
-                                <state key="normal" title="Start Game"/>
-                                <connections>
-                                    <action selector="newGameButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nbi-Ne-YWG"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="nUw-Ah-fHQ">
+                                <rect key="frame" x="22" y="649" width="331" height="48"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBw-s7-WwK">
+                                        <rect key="frame" x="0.0" y="0.0" width="161.66666666666666" height="48"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <state key="normal" title="1 Player"/>
+                                        <connections>
+                                            <action selector="newGameButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nbi-Ne-YWG"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D1L-EK-PTa">
+                                        <rect key="frame" x="169.66666666666663" y="0.0" width="161.33333333333337" height="48"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <state key="normal" title="V.S. COM"/>
+                                        <connections>
+                                            <action selector="vsComButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qI5-Ld-Oz2"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="oRt-BJ-0R7">
                                 <rect key="frame" x="22.666666666666657" y="710" width="330" height="48"/>
                                 <subviews>
@@ -386,12 +400,13 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="qBw-s7-WwK" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="0bZ-8W-wdp"/>
-                            <constraint firstItem="oRt-BJ-0R7" firstAttribute="top" secondItem="qBw-s7-WwK" secondAttribute="bottom" constant="8" id="5B2-ev-Fgf"/>
                             <constraint firstItem="PZO-Gf-6Ni" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="MiO-kt-Ral"/>
                             <constraint firstItem="oRt-BJ-0R7" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="VCh-wD-cQ8"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="oRt-BJ-0R7" secondAttribute="bottom" constant="20" id="Wtm-Q6-M4z"/>
-                            <constraint firstItem="qBw-s7-WwK" firstAttribute="top" secondItem="PZO-Gf-6Ni" secondAttribute="bottom" constant="8" id="wh2-3a-D7s"/>
+                            <constraint firstItem="nUw-Ah-fHQ" firstAttribute="top" secondItem="PZO-Gf-6Ni" secondAttribute="bottom" constant="15" id="Ys3-Hf-ubW"/>
+                            <constraint firstItem="nUw-Ah-fHQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="22" id="icI-9F-xnE"/>
+                            <constraint firstItem="oRt-BJ-0R7" firstAttribute="top" secondItem="nUw-Ah-fHQ" secondAttribute="bottom" constant="13" id="kO8-yt-IDM"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="nUw-Ah-fHQ" secondAttribute="trailing" constant="22" id="l57-Bz-4ME"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

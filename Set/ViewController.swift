@@ -76,13 +76,13 @@ class ViewController: UIViewController {
                 assignProperty()
                 game.chooseCard(at: cardNumber)
                 updateViewFromModel()
-                if !game.setCardDeck.isEmpty {
+                if vsComMode && !game.setCardDeck.isEmpty {
                     playerSetFirst = true
                     versus.computeCounter = 0.0
                     versus.computeTimer.invalidate()
                     versus.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
-                    game.removeSetCardProperty()
                 }
+                game.removeSetCardProperty()
             }
         } else {
             print("chosen card was not in cardButtons")
@@ -162,10 +162,27 @@ class ViewController: UIViewController {
     @IBOutlet weak var emojiLabel: UILabel!
     
     @IBAction func newGameButton(_ sender: UIButton) {
+        vsComMode = false
+        versus.computeCounter = 0
+        versus.computeTimer.invalidate()
+        emojiLabel.text = "🙂"
+        reset()
+    }
+    
+    var vsComMode = false
+    
+    @IBAction func vsComButton(_ sender: UIButton) {
+        vsComMode = true
+        versus.computeCounter = 0
         versus.computeTimer.invalidate()
         versus.computeTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(comPickASet), userInfo: nil, repeats: true)
+        reset()
+    }
+    
+    func reset() {
         visibleCards = 12
         game.score = 0
+        countLabel.text = String(versus.computeCounter)
         game.selectedCardDeck.removeAll()
         game.setCardDeck.removeAll()
         game.visibleCardDeck.removeAll()
