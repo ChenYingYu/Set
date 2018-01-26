@@ -61,11 +61,11 @@ class Set {
             selectedCardDeck.append(chosenCard)
             if selectedCardDeck.count == 3 {
                 checkSetPorperty = 0
-                let firstCard = selectedCardDeck[0].property
-                let secondCard = selectedCardDeck[1].property
-                let thirdCard = selectedCardDeck[2].property
+                let firstCard = selectedCardDeck[0]
+                let secondCard = selectedCardDeck[1]
+                let thirdCard = selectedCardDeck[2]
                 for compareIndex in 0...3 {
-                    if !(firstCard[compareIndex] == secondCard[compareIndex] && secondCard[compareIndex] == thirdCard[compareIndex]), !(firstCard[compareIndex] != secondCard[compareIndex] && secondCard[compareIndex] != thirdCard[compareIndex] && firstCard[compareIndex] != thirdCard[compareIndex]) {
+                    if !(firstCard.property[compareIndex] == secondCard.property[compareIndex] && secondCard.property[compareIndex] == thirdCard.property[compareIndex]), !(firstCard.property[compareIndex] != secondCard.property[compareIndex] && secondCard.property[compareIndex] != thirdCard.property[compareIndex] && firstCard.property[compareIndex] != thirdCard.property[compareIndex]) {
                         startTime = Date()
                         score = countPoints(score, -15)
                         break
@@ -75,19 +75,24 @@ class Set {
                 }
                 // if make a Set
                 if checkSetPorperty == 4 {
-                    for index in cards.indices {
-                        if selectedCardDeck.contains(where: { $0 == cards[index] }) {
-                            setCardDeck.append(cards[index])
-                            // remove set cards from visibleCardDeck
-                            visibleCardDeck = visibleCardDeck.filter { $0 != cards[index] }
-                            // remove their properties
-                            cards[index].property.removeAll()
-                        }
-                    }
+                    setCardDeck += [firstCard, secondCard, thirdCard]
+                    checkSetPorperty = 0
+//                    for index in cards.indices {
+//                        if selectedCardDeck.contains(where: { $0 == cards[index] }) {
+//                            setCardDeck += [cards[index]]
+//                            print("setCardDeck.count : \(setCardDeck.count)")
+//                            // remove set cards from visibleCardDeck
+                            visibleCardDeck = visibleCardDeck.filter { $0 != firstCard }
+                    visibleCardDeck = visibleCardDeck.filter { $0 != secondCard }
+                    visibleCardDeck = visibleCardDeck.filter { $0 != thirdCard }
+//                            // remove their properties
+//                            cards[index].property.removeAll()
+//                        }
+//                    }
+                    print("setCardDeck\(setCardDeck[0].property)\n\(setCardDeck[1].property)\n\(setCardDeck[2].property)\n")
                     timer()
                     computeTimer.invalidate()
                     score = countPoints(score, 30)
-                    selectedCardDeck.removeAll()
                 }
             }
         } else {
@@ -132,7 +137,7 @@ class Set {
                     }
                     if checkSetPorperty == 4 {
                         print("Has a visible Set")
-                        print("Compare times: \(times)\n 1st: \(firstCard)\n 2nd: \(secondCard)\n 3rd: \(thirdCard)")
+                        print("Compare times: \(times)\n 1st: \(firstCard.property)\n 2nd: \(secondCard.property)\n 3rd: \(thirdCard.property)")
                         setCardDeck += [firstCard, secondCard, thirdCard]
                         h = 0
                         m = 1

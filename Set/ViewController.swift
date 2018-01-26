@@ -68,6 +68,7 @@ class ViewController: UIViewController {
                 assignProperty()
                 game.chooseCard(at: cardNumber)
                 updateViewFromModel()
+                game.removeSetCardProperty()
             }
         } else {
             print("chosen card was not in cardButtons")
@@ -169,22 +170,23 @@ class ViewController: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
     
     func updateViewFromModel() {
+        print("VIEW setCeadDeck: \(game.setCardDeck.count)")
         for index in cardButtons.indices {
             let button = cardButtons[index]
             let card = game.cards[index]
-            if game.selectedCardDeck.contains(where: { $0 == card }) {
+            if game.setCardDeck.contains(where: { $0 == card }) {
+                button.layer.borderWidth = 6.0
+                button.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+                button.layer.cornerRadius = 8.0
+                print("setCard: \(card.property),setCardDeck.count: \(game.setCardDeck.count)")
+            } else if game.selectedCardDeck.contains(where: { $0 == card }) {
                 button.layer.borderWidth = 5.0
                 button.layer.borderColor = #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)
                 button.layer.cornerRadius = 8.0
             } else {
                 button.layer.borderWidth = 0.0
             }
-            if game.setCardDeck.contains(where: { $0 == card }) {
-                button.layer.borderWidth = 6.0
-                button.layer.borderColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
-                button.layer.cornerRadius = 8.0
-                game.setCardDeck = game.setCardDeck.filter { $0 != card}
-            }
+            
         }
         scoreLabel.text = "Score: \(game.score)"
     }
